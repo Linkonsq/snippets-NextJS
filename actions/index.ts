@@ -2,6 +2,7 @@
 
 import { db } from "@/db";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 export const editSnippet = async (id: number, code: string) => {
   await db.snippet.update({
@@ -9,6 +10,7 @@ export const editSnippet = async (id: number, code: string) => {
     data: { code },
   });
 
+  revalidatePath(`/snippets/${id}`); // Revalidate the specific snippet page to show the updated code
   redirect(`/snippets/${id}`);
 };
 
@@ -17,6 +19,7 @@ export const deleteSnippet = async (id: number) => {
     where: { id },
   });
 
+  revalidatePath("/"); // Revalidate the home page to show the updated list of snippets
   redirect("/");
 };
 
@@ -57,5 +60,7 @@ export const createSnippet = async (
       };
     }
   }
+
+  revalidatePath("/"); // Revalidate the home page to show the updated list of snippets
   redirect("/");
 };

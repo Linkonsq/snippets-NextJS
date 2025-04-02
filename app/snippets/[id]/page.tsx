@@ -48,3 +48,12 @@ const ShowSnippetPage = async (props: ShowSnippetPageProps) => {
 };
 
 export default ShowSnippetPage;
+
+// This function is used to generate static paths for the dynamic route
+export async function generateStaticParams() {
+  const snippets = await db.snippet.findMany();
+
+  return snippets.map((snippet) => ({
+    id: snippet.id.toString(),
+  }));
+}
